@@ -3,7 +3,9 @@ const request = require('request');
 const newsApiSources = require('../database/collections/newsApi.json');
 const Sources = require('../database/collections/sources');
 const Source = require('../database/models/source');
-const mercury = require('./mercuryController');
+// const mercury = require('./mercuryController');
+// import Mercury from '@postlight/mercury-parser';
+const newMercury = require('@postlight/mercury-parser')
 const Promise = require('bluebird');
 const utils = require('../utils');
 
@@ -68,28 +70,30 @@ const topStories = function(source, headlineMode, res) {
     });
     request(options, function(error, response, body) {
       let headlines = [];
-      // console.log('BEGINNING HEADLINES LENGTH === ', headlines.length);
+      console.log('BEGINNING HEADLINES LENGTH === ', headlines.length);
       if (error) {
         console.log('ERROR GETTING GUEST STORIES FROM NEWSAPI ===', error);
       } else {;
         var parsedNewsObj = JSON.parse(body);
         let collection = parsedNewsObj.articles.length;
-        // console.log('TOP STORIES FROM SERVER ===== ');
-        // parsedNewsObj.articles.forEach(function(article) {
-          // console.log(article.title);
-        // })
+        console.log('TOP STORIES FROM SERVER ===== ');
+        parsedNewsObj.articles.forEach(function(article) {
+          console.log(article.title);
+        })
         const bundler = function(article){
-          // console.log('PROCESSED ARTICLE === ', article.title);
+          console.log('PROCESSED ARTICLE === ', article.title);
           if (article.error) {
+            console.log('Error! Error!');
             collection--;
           } else {
             headlines.push(article);
           }
+          console.log('HEADLINES ARRAY: ', headlines);
           if (headlines.length === collection) {
-            // console.log('HEADLINES TO BE SENT BACK ==== ');
-            // headlines.forEach(function(article) {
-              // console.log(article.title);
-            // });
+            console.log('HEADLINES TO BE SENT BACK ==== ');
+            headlines.forEach(function(article) {
+              console.log(article.title);
+            });
             res.send(headlines);
           }
         };
@@ -101,11 +105,17 @@ const topStories = function(source, headlineMode, res) {
         */
 
         parsedNewsObj.articles.forEach(function(article) {
-          // console.log('ARTICLE BEING PROCESSED === ', article.title);
-          mercury.parseAndSave(99, article.url, headlineMode, function(result) {
-            // console.log('results for : ', article.url, result.title)
+          console.log('ARTICLE BEING PROCESSED === ', article.title);
+
+          newMercury.parse(article.url).then(result => {
+            console.log(result.title);
             bundler(result);
           });
+
+          // mercury.parseAndSave(99, article.url, headlineMode, function(result) {
+            // console.log('results for : ', article.url, result.title)
+          //   bundler(result);
+          // });
         });
 
         /* UNSUCCESSFUL ATTEMPTS AT PROMISE-BASED SOLUTION */

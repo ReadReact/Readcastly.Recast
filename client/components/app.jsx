@@ -384,11 +384,11 @@ class App extends React.Component {
 	}
 
 	getHeadlines(source) {
-    console.log('GETTING HEADLINES');
+    console.log('GETTING HEADLINES: ', source);
     this.setState({gettingHeadlines: true});
     axios.post('/topStories', {source: source, headlineMode: true})
       .then((res) => {
-        // console.log('app.jsx l 388: getHeadlines(source); res = ', res);
+        console.log('app.jsx l 388: getHeadlines(source); res = ', res);
         res.data.forEach((article) => {
           // console.log('app.jsx l 319. in forEach. article = ', article);
           if (article.publication_date) {

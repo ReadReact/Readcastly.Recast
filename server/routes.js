@@ -92,6 +92,7 @@ module.exports = function(app, express, passport) {
   });
 
   app.post('/topStories', function(req,res) {
+    console.log('about to call top stories...');
     news.topStories(req.body.source, req.body.headlineMode, res);
   });
 

@@ -3,6 +3,6 @@ node_modules/
 *.sql
 server/.DS_Store
 .notes
-.idea
+.ideas
 .DS_Store
 client/build/*
