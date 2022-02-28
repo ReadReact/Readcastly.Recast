@@ -83,7 +83,8 @@ const textToSpeech = (req, res, callback) => {
   const articleTitle = req.body.payload.article.title;
   const shortlyTitle = pollyHelpers.titleAbbreviator(articleTitle);
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
-  const textIn = req.body.payload.article.text /*text of the article from request object*/
+  // const textIn = req.body.payload.article.text /*text of the article from request object*/
+  const textIn = req.body.payload.article.content /*text of the article from request object*/
   const convertedTextIn = pollyHelpers.unescapeTextAgain(textIn); /*text of the article after converting hex characters*/
   const filename = shortlyTitle + '-' + (req.body.payload.article.article_id || 'temp').toString() + '-' + voiceId.toLowerCase() + '.mp3' /*unique article_id number*/
   // || '999999999.mp3' // /*unique article_id number*/

@@ -80,6 +80,7 @@ const topStories = function(source, headlineMode, res) {
         parsedNewsObj.articles.forEach(function(article) {
           console.log(article.title);
         })
+        
         const bundler = function(article){
           console.log('PROCESSED ARTICLE === ', article.title);
           if (article.error) {
@@ -88,13 +89,16 @@ const topStories = function(source, headlineMode, res) {
           } else {
             headlines.push(article);
           }
-          console.log('HEADLINES ARRAY: ', headlines);
+          // console.log('HEADLINES ARRAY: ', headlines);
           if (headlines.length === collection) {
             console.log('HEADLINES TO BE SENT BACK ==== ');
             headlines.forEach(function(article) {
               console.log(article.title);
             });
             res.send(headlines);
+          }
+          else {
+            console.log('LENGTHS DO NOT MATCH');
           }
         };
 
@@ -110,6 +114,8 @@ const topStories = function(source, headlineMode, res) {
           newMercury.parse(article.url).then(result => {
             console.log(result.title);
             bundler(result);
+          }).catch(function(err) {
+            console.log('ERROR IN MERCURY PARSING', err);
           });
 
           // mercury.parseAndSave(99, article.url, headlineMode, function(result) {
