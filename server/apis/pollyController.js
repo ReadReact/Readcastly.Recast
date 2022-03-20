@@ -18,8 +18,8 @@ const line = '========='; /* FOR DEBUGGING */
 // 2. Function that generates Audio Stream by making API call to Polly; => returns a promise object
 const generatePollyAudio = (text, voiceId, res) => {
   log ('\n\n', line, 'INSIDE generatePollyAudio')  /* FOR DEBUGGING */
-  log(line, 'text: ', text)
-  log(line, 'voiceId: ', voiceId)
+  // log(line, 'text: ', text)
+  // log(line, 'voiceId: ', voiceId)
   // log(line, 'res: ', res)
   const params = {
     Text: text,
@@ -28,13 +28,13 @@ const generatePollyAudio = (text, voiceId, res) => {
     VoiceId: voiceId,
     SampleRate: '22050'
   }
-  log('PARAMS:========> ', params);  /* FOR DEBUGGING */
+//  log('PARAMS:========> ', params);  /* FOR DEBUGGING */
   return polly.synthesizeSpeech(params).promise()
 
   .then( data => {
     log('>INSIDE generatePollyAudio-PC')  /* FOR DEBUGGING */
     log('>DATA.AudioStream instanceof Buffer: ', data.AudioStream instanceof Buffer)  /* FOR DEBUGGING */
-    log('XXXX data: ', data);
+    // log('XXXX data: ', data);
     if (data.AudioStream instanceof Buffer) return data
   })
   .catch(error => {
@@ -77,13 +77,14 @@ const writeAudioStreamToS3 = ( audioStream, filename ) => {
 // Note: callback is passed in and invoked at the bottom of the promise chain
 const textToSpeech = (req, res, callback) => {
   log(line, 'BACK-B-pollyController-textToSpeech')  /* FOR DEBUGGING */
-  log(line, 'req.body.payload: ', req.body.payload)  /* FOR DEBUGGING */
+  // log(line, 'req.body.payload: ', req.body.payload)  /* FOR DEBUGGING */
 
   // Extract needed info from request object
   const articleTitle = req.body.payload.article.title;
   const shortlyTitle = pollyHelpers.titleAbbreviator(articleTitle);
   const voiceId = req.body.payload.voice || 'Joanna' /*name of voice*/
-  const textIn = req.body.payload.article.text /*text of the article from request object*/
+  // const textIn = req.body.payload.article.text /*text of the article from request object*/
+  const textIn = req.body.payload.article.content /*text of the article from request object*/
   const convertedTextIn = pollyHelpers.unescapeTextAgain(textIn); /*text of the article after converting hex characters*/
   const filename = shortlyTitle + '-' + (req.body.payload.article.article_id || 'temp').toString() + '-' + voiceId.toLowerCase() + '.mp3' /*unique article_id number*/
   // || '999999999.mp3' // /*unique article_id number*/
@@ -110,8 +111,8 @@ const textToSpeech = (req, res, callback) => {
   // log(line, 'BACK-D2-words.length: ', words.length);  /* FOR DEBUGGING */
 
   log(line, 'BACK-D2-textToSpeech: allText>>>: ', allText); // LOTS  /* FOR DEBUGGING */
-  log(line, 'BACK-D2-textToSpeech: allTextArray>>>: ', allTextArray); // LOTS  /* FOR DEBUGGING */
-  log(line, 'BACK-D2-allTextArray.length: ', allTextArray.length);  /* FOR DEBUGGING */
+  // log(line, 'BACK-D2-textToSpeech: allTextArray>>>: ', allTextArray); // LOTS  /* FOR DEBUGGING */
+  // log(line, 'BACK-D2-allTextArray.length: ', allTextArray.length);  /* FOR DEBUGGING */
 
 
 

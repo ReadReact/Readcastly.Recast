@@ -305,7 +305,7 @@ class App extends React.Component {
 
 		axios.post(route, {payload: exportObj})
 		.then((res) => {
-			// console.log('FRONT-B->>>RES: ', res.data.url)  /* MH: DEBUGGING */
+			console.log('FRONT-B->>>RES: ', res.data.url)  /* MH: DEBUGGING */
 			if (articleObject.method === "stream") {
 				this.setState({nowPlaying: {url: res.data.url, title: res.data.title}, isConverting: false, isLoading: false});
 				this.popToast();
@@ -384,17 +384,22 @@ class App extends React.Component {
 	}
 
 	getHeadlines(source) {
-    console.log('GETTING HEADLINES');
+    console.log('GETTING HEADLINES: ', source);
     this.setState({gettingHeadlines: true});
     axios.post('/topStories', {source: source, headlineMode: true})
       .then((res) => {
-        // console.log('app.jsx l 388: getHeadlines(source); res = ', res);
+        console.log('app.jsx l 388: getHeadlines(source); res = ', res);
         res.data.forEach((article) => {
           // console.log('app.jsx l 319. in forEach. article = ', article);
-          if (article.publication_date) {
-            article.publication_date = this.cleanDate(article.publication_date);
-            // console.log('Clean article.publication_date = ', article.publication_date);
-          }
+			    if (article.date_published) {
+						article.date_published = this.cleanDate(article.date_published);
+						console.log('Clean article.publication_date = ', article.date_published);
+					}
+
+          // if (article.publication_date) {
+          //   article.publication_date = this.cleanDate(article.publication_date);
+          //   console.log('Clean article.publication_date = ', article.publication_date);
+          // }
           article.est_time = this.cleanTime(article.est_time);
            randomId++
            article.id = randomId;

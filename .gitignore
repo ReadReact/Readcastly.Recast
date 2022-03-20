@@ -2,7 +2,10 @@ node_modules/
 .env
 *.sql
 server/.DS_Store
-.notes
-.idea
 .DS_Store
+
+# ignore all files in client/build/
 client/build/*
+
+# ignore anything in todo/ directory, in current directory
+/todo/
