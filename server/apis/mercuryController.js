@@ -40,12 +40,12 @@ const articleObjFinisher = function(obj,source) {
   obj.title = utils.unescapeHex(source.title);
   // NOTE: a series of console.log statements that follow (below) track the changes before and after each step in processing the article text
 
-  // log(line, 'articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content); /* MH: DEBUGGING */
+  log(line, 'articleObjFinisher-A -- PRE-STRIP-source.content: ', source.content); /* MH: DEBUGGING */
 
   // ...put text through the stripper module, to strip away html tags from the article text
   const strippedText = stripper(source.content);
 
-  // log(line, 'articleObjFinisher-B -- POST-STRIP-strippedText: ', strippedText); /* MH: DEBUGGING */
+  log(line, 'articleObjFinisher-B -- POST-STRIP-strippedText: ', strippedText); /* MH: DEBUGGING */
 
   // ...put stripped test through unescapeHex function to remove/replace hex character codes
   const strippedUnescapedText = utils.unescapeHex(strippedText);
@@ -74,6 +74,7 @@ const articleObjFinisher = function(obj,source) {
 
 
 const parseAndSave = function(userId, url, headlineMode, callback){
+  console.log('INSIDE parseAndSave -- url: ', url);
   let article = articleObjStarter(url,userId);
   request(optionsBuilder(url), function(error, response, body) {
     // error if request doesn't go through
